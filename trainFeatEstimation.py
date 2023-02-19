@@ -7,6 +7,9 @@ path = r"C:\Shir ASUS laptop\New projects\Bird classification\Dataset"
 trainingSet, trainingTarget = pd.read_csv(path + r"\training_set.csv"), pd.read_csv(path + r"\training_target.csv")
 full_train = pd.concat([trainingSet, trainingTarget["species"]], axis=1)
 
+# checking the number of missing items for each feature:
+BDnum, BLnum, WLnum, Lnum, Mnum, Snum = full_train["bill_depth"].isna().sum(), full_train["bill_length"].isna().sum(), full_train["wing_length"].isna().sum(), full_train["location"].isna().sum(), full_train["mass"].isna().sum(), full_train["sex"].isna().sum()
+
 # switching loc_ to inx:
 def location_incoding(dataSet):
     dataSet["location"] = dataSet["location"].replace(to_replace="loc_1", value=1)
@@ -14,9 +17,6 @@ def location_incoding(dataSet):
     dataSet["location"] = dataSet["location"].replace(to_replace="loc_3", value=3)
     return dataSet
 full_train = location_incoding(full_train)
-
-# checking the number of missing items for each feature:
-BDnum, BLnum, WLnum, Lnum, Mnum, Snum = full_train["bill_depth"].isna().sum(), full_train["bill_length"].isna().sum(), full_train["wing_length"].isna().sum(), full_train["location"].isna().sum(), full_train["mass"].isna().sum(), full_train["sex"].isna().sum()
 
 # rearranging data:
 cols = full_train.columns.tolist()
@@ -31,9 +31,9 @@ full_train[["bill_depth", "mass"]] = imputer0.fit_transform(full_train[["bill_de
 imputer1 = SimpleImputer(strategy='most_frequent')
 full_train[["sex", "location"]] = imputer1.fit_transform(full_train[["sex", "location"]])
 
-# removing data with Nans:
+# removing data that needs to be predicted::
 full_train = full_train.drop(labels=['ID'], axis=1)
-trainData = full_train.dropna(axis=0, subset=["location", "sex", "bill_length", "wing_length"])
+trainData = full_train.dropna(axis=0, subset=["bill_length", "wing_length"])
 
 # encoding categorical data:
 from sklearn.compose import ColumnTransformer
