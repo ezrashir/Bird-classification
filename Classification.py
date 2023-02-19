@@ -2,7 +2,7 @@ from CLASSES import MulticlassLinearRegressionPredictor
 from testFeatEstimation import full_test
 from trainFeatEstimation import full_train
 
-# uploading data:
+# sorting data:
 testID = full_test['ID'].values
 cols = full_train.columns.tolist()
 new_cols = [cols[0], cols[1], cols[3], cols[5], cols[6], cols[4]]
